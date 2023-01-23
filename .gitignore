@@ -1,0 +1,12 @@
+.vscode/settings.json
+src/__pycache__/__init__.cpython-37.pyc
+src/models/__pycache__/concept.cpython-37.pyc
+src/models/__pycache__/currency.cpython-37.pyc
+src/models/__pycache__/state.cpython-37.pyc
+src/models/__pycache__/payment.cpython-37.pyc
+src/models/__pycache__/type_payment.cpython-37.pyc
+src/services/__pycache__/conceptService.cpython-37.pyc
+src/services/__pycache__/currencyService.cpython-37.pyc
+src/services/__pycache__/paymentService.cpython-37.pyc
+src/services/__pycache__/stateService.cpython-37.pyc
+src/services/__pycache__/typePaymentService.cpython-37.pyc
