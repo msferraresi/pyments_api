@@ -170,7 +170,7 @@ def get_all_payments_group_by_month():
                                                          (and_(Payment.id_status == 2, Payment.id_type_payment == 3), Payment.other_ammount)], 
                                                          else_ = 0)
                                                ).label('adeudado')
-                                               ).filter_by(deleted_at = None).group_by(Payment.month, Payment.year).all()
+                                               ).filter_by(deleted_at = None).order_by(Payment.year.desc(), Payment.month.desc()).group_by(Payment.month, Payment.year).all()
 
         # OK
         return jsonify({'data': [schema2.dump(element) for element in elements]}), 200
