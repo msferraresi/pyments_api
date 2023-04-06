@@ -17,13 +17,6 @@ venv/Lib/site-packages/colorama/__pycache__/ansitowin32.cpython-37.pyc
 venv/Lib/site-packages/colorama/__pycache__/initialise.cpython-37.pyc
 venv/Lib/site-packages/colorama/__pycache__/win32.cpython-37.pyc
 venv/Lib/site-packages/colorama/__pycache__/winterm.cpython-37.pyc
-venv/Lib/site-packages/colorama/__pycache__/__init__.cpython-37.pyc
-venv/Lib/site-packages/colorama/__pycache__/ansi.cpython-37.pyc
-venv/Lib/site-packages/colorama/__pycache__/ansitowin32.cpython-37.pyc
-venv/Lib/site-packages/colorama/__pycache__/initialise.cpython-37.pyc
-venv/Lib/site-packages/colorama/__pycache__/win32.cpython-37.pyc
-venv/Lib/site-packages/colorama/__pycache__/winterm.cpython-37.pyc
-venv/Lib/site-packages/pip/_vendor/packaging/__pycache__/__init__.cpython-37.pyc
 venv/Lib/site-packages/pip/_vendor/packaging/__pycache__/__init__.cpython-37.pyc
 config/__pycache__/configDev.cpython-37.pyc
 venv/Lib/site-packages/pip/__pycache__/__init__.cpython-37.pyc
@@ -74,6 +67,4 @@ venv/Lib/site-packages/pip/_internal/network/__pycache__/cache.cpython-37.pyc
 venv/Lib/site-packages/pip/_internal/network/__pycache__/download.cpython-37.pyc
 venv/Lib/site-packages/pip/_internal/network/__pycache__/session.cpython-37.pyc
 venv/Lib/site-packages/pip/_internal/network/__pycache__/utils.cpython-37.pyc
-config/__pycache__/configDev.cpython-37.pyc
-config/__pycache__/configDev.cpython-37.pyc
-config/__pycache__/configDev.cpython-37.pyc
+*.cpython-311.pyc
