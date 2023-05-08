@@ -19,8 +19,8 @@ class DevelopmentConfig(Config):
     Config.PORT_APP = 5001
     Config.SERVER_NAME = 'localhost:5001'
     USER_DB = 'root'
-    PASS_DB = 'Lepo#1867'
+    PASS_DB = "Lepo_1867"
     HOST_DB = 'localhost'
     PORT_DB = 3306
-    NAME_DB = 'pymentDB'
+    NAME_DB = 'pymentdb'
     SQLALCHEMY_DATABASE_URI= 'mysql+pymysql://{}:{}@{}:{}/{}'.format(USER_DB,PASS_DB,HOST_DB,PORT_DB,NAME_DB)
