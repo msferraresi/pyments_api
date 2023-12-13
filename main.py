@@ -1,6 +1,16 @@
+import sys
 from src import create_app
 
-app = create_app('development')
+environment = 'development'
+
+def main():
+    global environment
+    if len(sys.argv) > 1:
+        if sys.argv[1]  == 'prod':
+            environment = 'production'
+            
+    app=create_app(environment)
+    app.run()
 
 if __name__ == '__main__':
-	app.run(port=app.config['PORT_APP'])
+    main()

@@ -1,14 +1,15 @@
-import datetime
+import datetime as dt
 from flask import Blueprint, jsonify, request
+from flask_jwt_extended import jwt_required
 from src.models.type_payment import TypePaymentSchema, TypePayment
 from src import db
 
 app = Blueprint('type_payment',__name__,url_prefix='/type_payment')
 
 schema = TypePaymentSchema()
-schemas = TypePaymentSchema(many=True)
 
-@app.route('/create', methods=['POST'])
+@app.route('', methods=['POST'])
+@jwt_required()
 def create():
     values = request.get_json()           
     if not values:               
@@ -21,7 +22,8 @@ def create():
         db.session.commit()
         return jsonify({'data': schema.dump(element)}), 201 # Created}), 201
 
-@app.route('/update/<id>', methods=['PUT'])
+@app.route('/<int:id>', methods=['PUT'])
+@jwt_required()
 def update(id):
     element = TypePayment.query.get(id)
     values = request.get_json()  
@@ -36,7 +38,8 @@ def update(id):
         db.session.commit()
         return jsonify({'data': schema.dump(element)}), 200 # OK
 
-@app.route('/delete/<id>', methods=['DELETE'])
+@app.route('/<int:id>', methods=['DELETE'])
+@jwt_required()
 def delete(id):
     element = TypePayment.query.get(id)
     if not element:               
@@ -46,7 +49,8 @@ def delete(id):
         db.session.commit()
         return jsonify({'message': 'Type payment deleted'}), 200 # OK
 
-@app.route('/all', methods=['GET'])
+@app.route('', methods=['GET'])
+@jwt_required()
 def list():
     elements = TypePayment.query.order_by(TypePayment.name.asc()).filter_by(deleted_at = None).all()
     if not elements:               
@@ -55,7 +59,8 @@ def list():
         return jsonify({'data': schema.dump(elements, many=True)}), 200 # OK
 
 
-@app.route('/get/<id>', methods=['GET'])
+@app.route('/<int:id>', methods=['GET'])
+@jwt_required()
 def getByID(id):
     element = TypePayment.query.get(id)
     if not element:               
