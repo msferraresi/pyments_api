@@ -10,7 +10,10 @@ class Config:
     SERVER_NAME = None
     SQLALCHEMY_TRACK_MODIFICATIONS=False
     UPLOAD_FOLDER = 'uploads'
-
+    USER_FOLDER = 'users'
+    INVOICE_FOLDER = 'invoices'
+    RECEIPT_FOLDER = 'receipts'
+    HOUSE_FOLDER = 'houses'
 class DevelopmentConfig(Config):
     Config.ENV = 'development'
     Config.DEBUG = True
@@ -22,5 +25,5 @@ class DevelopmentConfig(Config):
     PASS_DB = 'Lepo1867'
     HOST_DB = 'localhost'
     PORT_DB = 3306
-    NAME_DB = 'pymentdb_dev2'
+    NAME_DB = 'pymentdb_dev3'
     SQLALCHEMY_DATABASE_URI= 'mysql+pymysql://{}:{}@{}:{}/{}'.format(USER_DB,PASS_DB,HOST_DB,PORT_DB,NAME_DB)

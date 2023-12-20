@@ -9,41 +9,107 @@ from flask_jwt_extended import JWTManager
 db = SQLAlchemy()
 ma = Marshmallow()
 jwt = JWTManager()
+config_data = ''
 
 def create_app(environment=None):
-    app = Flask(__name__)
+    app_instance = Flask(__name__)
 
     if environment == 'production':
-        app.config.from_object('config.configProd.ProductionConfig')
+        app_instance.config.from_object('config.configProd.ProductionConfig')
     elif environment == 'development':
-        app.config.from_object('config.configDev.DevelopmentConfig')
+        app_instance.config.from_object('config.configDev.DevelopmentConfig')
     else:
         raise(Exception)
     
-    db.init_app(app)
-    ma.init_app(app)
-    jwt.init_app(app)
-    CORS(app)
+    db.init_app(app_instance)
+    ma.init_app(app_instance)
+    jwt.init_app(app_instance)
+    CORS(app_instance)
     
 
-    with app.app_context():
-        register_blueprint(app)
+    with app_instance.app_context():
+        register_blueprint(app_instance)
         db.create_all()
     
-    with app.app_context():
-        create_initial_data()
-
-    if not os.path.exists(app.config['UPLOAD_FOLDER']):
-        os.makedirs(app.config['UPLOAD_FOLDER'])
+    '''with app.app_context():
+        create_initial_data_old()'''
         
-    return app
+    with app_instance.app_context():
+        from src.models import Concept, Currency, State, TypePayment, Role, TypeHouse
+        create_initial_data(Concept, [
+        {'name': 'Tarjeta Credito'},
+        {'name': 'Telefonia'},
+        {'name': 'Credito'},
+        {'name': 'Servicio'},
+        {'name': 'Impuesto'},
+        {'name': 'Varios'}
+        ])
 
-def register_blueprint(app):
+        create_initial_data(Currency, [
+            {'name': 'Peso', 'endpoint': ''},
+            {'name': 'Dolar', 'endpoint': ''},
+            {'name': 'Euro', 'endpoint': ''}
+        ])
+
+        create_initial_data(State, [
+            {'name': 'PAGADO'},
+            {'name': 'ADEUDADO'}
+        ])
+
+        create_initial_data(TypePayment, [
+            {'name': 'Total'},
+            {'name': 'Minimo'},
+            {'name': 'Otro'}
+        ])
+
+        create_initial_data(Role, [
+            {'name': 'Empleado'},
+            {'name': 'Cliente'}
+        ])
+
+        create_initial_data(TypeHouse, [
+            {'name': 'Principal'},
+            {'name': 'Laboral'},
+            {'name': 'Particular'},
+            {'name': 'Otra'}
+        ])
+        
+    create_subdirectory(app_instance.config['UPLOAD_FOLDER'], app_instance.config['USER_FOLDER'])
+    create_subdirectory(app_instance.config['UPLOAD_FOLDER'], app_instance.config['INVOICE_FOLDER'])
+    create_subdirectory(app_instance.config['UPLOAD_FOLDER'], app_instance.config['RECEIPT_FOLDER'])
+    create_subdirectory(app_instance.config['UPLOAD_FOLDER'], app_instance.config['HOUSE_FOLDER'])
+    global config_data
+    config_data = app_instance
+    #print(app_instance.config['UPLOAD_FOLDER'])
+    return app_instance
+
+def register_blueprint(app_instance):
     for module in find_modules('src.services'):
-        app.register_blueprint(import_string(module).app) 
+        app_instance.register_blueprint(import_string(module).app) 
 
-def create_initial_data():
+
+def create_subdirectory(base_folder, subdirectory):
+    if not os.path.exists(base_folder):
+        os.makedirs(base_folder, exist_ok=True)
+        
+    subdirectory_path = os.path.join(base_folder, subdirectory)
+
+    if not os.path.exists(subdirectory_path):
+        os.makedirs(subdirectory_path, exist_ok=True)
+
+
+def create_initial_data(model, values):
+    existing_data = model.query.all()
+    if not existing_data:
+        instances = [model(**value) for value in values]
+        db.session.add_all(instances)
+        db.session.commit()
+
+
+
+'''def create_initial_data_old():
     from src.models import Concept, Currency, State, TypePayment, Role
+    #, TypeHouse
     
     existing_data = Concept.query.all()
     if not existing_data:
@@ -100,3 +166,15 @@ def create_initial_data():
 
         db.session.add_all(roles)
         db.session.commit()
+        
+    existing_data = TypeHouse.query.all()
+    if not existing_data:
+        type_houses = [
+            TypeHouse(name='Principal'),
+            TypeHouse(name='Laboral'),
+            TypeHouse(name='Particular'),
+            TypeHouse(name='Otra')
+        ]
+
+        db.session.add_all(type_houses)
+        db.session.commit()'''

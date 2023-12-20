@@ -1,6 +1,6 @@
 from src import db, ma
 from sqlalchemy.orm import relationship
-from src.models import StateSchema, TypePaymentSchema, CurrencySchema, ConceptSchema
+from src.models import StateSchema, TypePaymentSchema, CurrencySchema, ConceptSchema, HouseSchema
 class Payment(db.Model):
     __tablename__ = 'payments'
     
@@ -9,6 +9,8 @@ class Payment(db.Model):
     id_type_payment = db.Column(db.Integer, db.ForeignKey('type_payments.id'), nullable=False)
     id_currency = db.Column(db.Integer, db.ForeignKey('currencies.id'), nullable=False)
     id_concept = db.Column(db.Integer, db.ForeignKey('concepts.id'), nullable=False)
+    id_house = db.Column(db.Integer, db.ForeignKey('houses.id'), nullable=False)
+    id_user = db.Column(db.Integer, nullable=False)
     month = db.Column(db.Integer, nullable=False)
     year = db.Column(db.Integer, nullable=False)
     layer = db.Column(db.String(120), nullable=False)
@@ -23,9 +25,9 @@ class Payment(db.Model):
     type_payments = relationship("TypePayment", back_populates='payments')
     currencies = relationship("Currency", back_populates='payments')
     concepts = relationship("Concept", back_populates='payments')
+    houses = relationship("House", back_populates='payments')
 
-
-    def __init__(self, id_status, id_type_payment, id_currency, id_concept, month, year, layer, max_ammount, min_ammount, other_ammount):
+    def __init__(self, id_status, id_type_payment, id_currency, id_concept, month, year, layer, max_ammount, min_ammount, other_ammount, id_house):
         self.id_status = id_status
         self.id_type_payment = id_type_payment
         self.id_currency = id_currency
@@ -36,6 +38,7 @@ class Payment(db.Model):
         self.max_ammount = max_ammount
         self.min_ammount = min_ammount
         self.other_ammount = other_ammount
+        self.id_house = id_house
         
     def to_dict(self):
         return {
@@ -66,6 +69,10 @@ class Payment(db.Model):
                     'id': self.concepts.id,
                     'name': self.concepts.name,
                     },
+            'house': {
+                    'id': self.houses.id,
+                    'name': self.houses.name,
+                    },
             'created_at': self.created_at, 
             'updated_at': self.updated_at, 
             'deleted_at': self.deleted_at
@@ -76,6 +83,7 @@ class PaymentSchema(ma.Schema):
     type_payments = ma.Nested(TypePaymentSchema, only=('id', 'name'))
     currencies = ma.Nested(CurrencySchema, only=('id', 'name'))
     concepts = ma.Nested(ConceptSchema, only=('id', 'name'))
+    houses = ma.Nested(HouseSchema, only=('id', 'name'))
     class Meta:
         model = Payment
         load_instance = True
@@ -91,51 +99,7 @@ class PaymentSchema(ma.Schema):
                   'max_ammount', 
                   'min_ammount', 
                   'other_ammount', 
-                  'states', 'type_payments', 'currencies', 'concepts',
-                  'created_at', 
-                  'updated_at', 
-                  'deleted_at')
-
-class PaymentSchema2(ma.Schema):
-    states = ma.Nested(StateSchema, only=('id', 'name'))
-    type_payments = ma.Nested(TypePaymentSchema, only=('id', 'name'))
-    class Meta:
-        model = Payment
-        load_instance = True
-        sqla_sesson = db.session
-        fields = ('month', 
-                  'year',
-                  'states',
-                  'type_payments',
-                  'max_ammount', 
-                  'min_ammount', 
-                  'other_ammount')
-
-class PaymentSchema3(ma.Schema):
-    states = ma.Nested(StateSchema, only=('id', 'name'))
-    type_payments = ma.Nested(TypePaymentSchema, only=('id', 'name'))
-    currencies = ma.Nested(CurrencySchema, only=('id', 'name'))
-    concepts = ma.Nested(ConceptSchema, only=('id', 'name'))
-    class Meta:
-        model = Payment
-        load_instance = True
-        sqla_sesson = db.session
-        fields = ('id', 
-                  'id_status',
-                  'status.name',
-                  'id_type_payment', 
-                  'type_payment.name',
-                  'id_currency', 
-                  'currency.name',
-                  'id_concept', 
-                  'concept.name',
-                  'month', 
-                  'year', 
-                  'layer', 
-                  'max_ammount', 
-                  'min_ammount', 
-                  'other_ammount', 
-                  'states', 'type_payments', 'currencies', 'concepts',
+                  'states', 'type_payments', 'currencies', 'concepts', 'houses', 'users',
                   'created_at', 
                   'updated_at', 
                   'deleted_at')

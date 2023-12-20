@@ -10,6 +10,10 @@ class Config:
     SERVER_NAME = None
     SQLALCHEMY_TRACK_MODIFICATIONS=False
     UPLOAD_FOLDER = 'uploads'
+    USER_FOLDER = 'users'
+    INVOICE_FOLDER = 'invoices'
+    RECEIPT_FOLDER = 'receipts'
+    HOUSE_FOLDER = 'houses'
 
 class ProductionConfig(Config):
     Config.ENV = 'production'

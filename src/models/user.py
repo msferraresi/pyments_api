@@ -1,7 +1,7 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from src import db, ma
 from sqlalchemy.orm import relationship
-from src.models import RoleSchema
+from src.models import RoleSchema, HouseSchema
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -12,18 +12,21 @@ class User(db.Model):
     password = db.Column(db.String(256), nullable=False)
     mail = db.Column(db.String(100), unique=True, nullable=False)
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=False, default=2)
+    avatar_user = db.Column(db.String(200), default='default_user.png')
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
     deleted_at = db.Column(db.DateTime, nullable=True)
 
     roles = relationship("Role", back_populates='users')
-
-    def __init__(self, name, last_name, password, mail, role_id):
+    houses = relationship("House", back_populates='users')
+    
+    def __init__(self, name, last_name, password, mail, role_id, avatar_user):
         self.name = name
         self.last_name = last_name
         self.set_password(password)
         self.mail = mail
         self.role_id = role_id
+        self.avatar_user = avatar_user
         
     def set_password(self, password):
         self.password = generate_password_hash(password)
@@ -41,14 +44,16 @@ class User(db.Model):
             'role': {
                 'id': self.roles.id,
                 'name': self.roles.name
-            }
+            },
+            'avatar_user': self.avatar_user
         }
         
 class UserSchema(ma.Schema):
     role = ma.Nested(RoleSchema, only=('id', 'name'))
+    houses = ma.Nested(HouseSchema, only=('id', 'name'))
     class Meta:
         model = User
         load_instance = True
         sqla_sesson = db.session
-        fields = ('id', 'name', 'last_name', 'mail', 'role_id', 'role', 
+        fields = ('id', 'name', 'last_name', 'mail', 'avatar_user', 'role_id', 'role', 'houses',
                   'created_at', 'updated_at', 'deleted_at')

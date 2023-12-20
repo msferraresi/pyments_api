@@ -1,6 +1,5 @@
 import sys
 from src import create_app
-
 environment = 'development'
 
 def main():
@@ -9,8 +8,8 @@ def main():
         if sys.argv[1]  == 'prod':
             environment = 'production'
             
-    app=create_app(environment)
-    app.run()
+    app_instance=create_app(environment)
+    app_instance.run()
 
 if __name__ == '__main__':
     main()
