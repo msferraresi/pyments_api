@@ -7,7 +7,7 @@ class Config:
     TESTING = True
     SECRET_KEY = "dev"
     PORT_APP = 5001
-    SERVER_NAME = "localhost:5001"
+    #SERVER_NAME = "localhost:5001"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     USER_DB = "root"

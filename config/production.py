@@ -7,7 +7,7 @@ class Config:
     TESTING = False
     SECRET_KEY = "prod"
     PORT_APP = 5000
-    SERVER_NAME = "localhost:5000"
+    #SERVER_NAME = "localhost:5000"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     USER_DB = "root"
