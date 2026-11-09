@@ -9,7 +9,7 @@ def main():
             environment = 'production'
             
     app_instance=create_app(environment)
-    app_instance.run()
-
+    app_instance.run(host='0.0.0.0', port=5001)
+    
 if __name__ == '__main__':
     main()

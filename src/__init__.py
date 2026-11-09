@@ -5,6 +5,7 @@ from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
+import re
 
 # Inicialización de extensiones
 db = SQLAlchemy()
@@ -32,10 +33,8 @@ def create_app(environment=None):
     jwt.init_app(app_instance)
     CORS(
         app_instance,
-        methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
-        origins=[
-            "http://localhost:3000"
-        ],  # Permite peticiones desde tu frontend de React
+        methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+        origins=re.compile(r"^http://.*:3000$"),
         supports_credentials=True,  # Permite el envío de cookies y headers de autorización
         allow_headers=["Authorization", "Content-Type"],
     )
